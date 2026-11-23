@@ -1,0 +1,26 @@
+# Environment variables
+.env
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# SQLite databases
+*.db
+*.db-wal
+*.db-shm
+
+# OS and temp files
+.DS_Store
+Thumbs.db
+~$*

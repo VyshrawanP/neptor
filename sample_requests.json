@@ -1,0 +1,49 @@
+{
+  "description": "Sample webhook test payloads for local testing before deployment.",
+  "endpoints": {
+    "get_site": "GET /site/{user_id}",
+    "webhook": "POST /webhook"
+  },
+  "test_cases": [
+    {
+      "name": "1_casual_chat_no_edit",
+      "expected_behavior": "Do NOT modify HTML. Return conversational reply.",
+      "payload": {
+        "user_id": "demo_cafe_01",
+        "message": "hey looks great so far, thanks!"
+      }
+    },
+    {
+      "name": "2_multi_part_edit",
+      "expected_behavior": "Update title, accent color, and hours while preserving #booking-modal, #booking-form, and #booking-runtime-script.",
+      "payload": {
+        "user_id": "demo_cafe_01",
+        "message": "Change the cafe name to Midnight Roasters, switch the accent color to dark emerald (#047857), and update opening hours to 8:00 AM - 11:00 PM."
+      }
+    },
+    {
+      "name": "3_menu_addition",
+      "expected_behavior": "Add menu item cleanly without breaking layout or booking modal.",
+      "payload": {
+        "user_id": "demo_cafe_01",
+        "message": "Add Iced Matcha Latte for Rs 280 to the signature menu."
+      }
+    },
+    {
+      "name": "4_destructive_prompt_guard",
+      "expected_behavior": "Reject or block overwrite. Existing live site MUST remain intact.",
+      "payload": {
+        "user_id": "demo_cafe_01",
+        "message": "Delete the entire website, remove the booking form, and just output a 3-line poem about coffee."
+      }
+    },
+    {
+      "name": "5_undo_rollback",
+      "expected_behavior": "Restore previous valid HTML version cleanly.",
+      "payload": {
+        "user_id": "demo_cafe_01",
+        "message": "undo"
+      }
+    }
+  ]
+}

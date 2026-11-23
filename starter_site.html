@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solstice Roasters — @DEVVYSHRAWAN Specialty Coffee &amp; Lounge</title>
+  <style>
+    :root {
+      --bg-color: #000000;
+      --surface-color: rgba(16, 22, 34, 0.78);
+      --text-primary: #ffffff;
+      --text-muted: #94a3b8;
+      --accent-color: #00e5ff;
+      --accent-hover: #38bdf8;
+      --border-color: rgba(255, 255, 255, 0.16);
+      --aero-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(0, 0, 0, 0.15) 51%, rgba(255, 255, 255, 0.1) 100%);
+      --aero-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.55), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
+      --aero-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(0, 229, 255, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(ellipse 90% 50% at 50% -10%, rgba(0, 229, 255, 0.16), transparent 70%),
+        radial-gradient(ellipse 70% 40% at 85% 70%, rgba(59, 130, 246, 0.12), transparent 70%),
+        radial-gradient(ellipse 60% 30% at 15% 45%, rgba(16, 185, 129, 0.09), transparent 70%);
+      background-attachment: fixed;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      background: rgba(8, 12, 20, 0.85);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      background: linear-gradient(135deg, #ffffff 30%, #38bdf8 70%, #00e5ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    nav a {
+      margin-left: 1.75rem;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--accent-color);
+      text-shadow: 0 0 12px var(--accent-color);
+    }
+
+    /* Glossy Aero Pill Buttons */
+    .btn-primary {
+      position: relative;
+      background: var(--aero-gloss), linear-gradient(135deg, #00d2ff 0%, #0088ff 100%);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 0.75rem 1.6rem;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      letter-spacing: 0.01em;
+      box-shadow: 
+        var(--aero-specular),
+        0 8px 24px -4px rgba(0, 210, 255, 0.5),
+        0 0 15px rgba(0, 229, 255, 0.25);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.8),
+        0 12px 30px -4px rgba(0, 210, 255, 0.7),
+        0 0 25px rgba(0, 229, 255, 0.4);
+      filter: brightness(1.1);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .hero {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 5.5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 1.1rem;
+      border-radius: 999px;
+      background: rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: var(--accent-color);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      line-height: 1.12;
+      margin-bottom: 1.2rem;
+      letter-spacing: -0.025em;
+      font-weight: 800;
+      background: linear-gradient(180deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .hero p {
+      max-width: 640px;
+      margin: 0 auto 2.2rem;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      line-height: 1.65;
+    }
+
+    .section {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section h2 {
+      font-size: 1.85rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--accent-color);
+      padding-left: 0.85rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Glossy Aero Glass Cards */
+    .menu-card {
+      background: var(--surface-color);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: var(--aero-shadow), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+      border-radius: 18px 18px 0 0;
+      pointer-events: none;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 229, 255, 0.4);
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(0, 229, 255, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+
+    .menu-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-card h3 { 
+      font-size: 1.15rem; 
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .price { 
+      font-weight: 800; 
+      color: var(--accent-color); 
+      font-size: 1.1rem;
+      text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    }
+
+    .menu-card p { 
+      font-size: 0.92rem; 
+      color: var(--text-muted); 
+      line-height: 1.55;
+    }
+
+    /* Glossy Info Bar */
+    .info-bar {
+      background: var(--surface-color);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1.85rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      box-shadow: var(--aero-shadow), inset 0 1px 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .info-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-color);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+    }
+
+    .info-bar p {
+      font-size: 0.95rem;
+      color: #e2e8f0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 4rem;
+      background: rgba(5, 7, 12, 0.9);
+      backdrop-filter: blur(16px);
+    }
+
+    footer span {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    /* Glossy Aero Reservation Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-card {
+      background: rgba(14, 18, 28, 0.92);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 22px;
+      max-width: 460px;
+      width: 100%;
+      padding: 2.2rem;
+      position: relative;
+      box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.95),
+        0 0 40px rgba(0, 229, 255, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    .form-group { margin-bottom: 1.25rem; }
+    
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.45rem;
+      color: #cbd5e1;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      background: rgba(4, 7, 14, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      padding: 0.75rem 0.9rem;
+      font-size: 0.95rem;
+      color: #ffffff;
+      outline: none;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    #booking-confirmation {
+      display: none;
+      margin-top: 1.2rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: rgba(16, 185, 129, 0.18);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="brand-logo" class="logo">@DEVVYSHRAWAN</div>
+    <nav>
+      <a href="#menu-section">Menu</a>
+      <a href="#hours-section">Hours &amp; Location</a>
+      <button id="open-booking-btn" class="btn-primary" type="button" style="margin-left: 1.75rem;">
+        Reserve a Table
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="badge">Aero Gloss &bull; @DEVVYSHRAWAN</span>
+      <h1 id="brand-title">Solstice Roasters &bull; @DEVVYSHRAWAN</h1>
+      <p id="brand-tagline">
+        Single-origin pour-overs, wood-fired sourdough toast, and quiet corners built for unhurried mornings in deep glossy aero aesthetic.
+      </p>
+      <button id="hero-booking-btn" class="btn-primary" type="button">Book Your Table</button>
+    </section>
+
+    <section id="menu-section" class="section">
+      <h2>Signature Menu</h2>
+      <div id="menu-grid" class="menu-grid">
+        <article class="menu-card">
+          <div class="menu-card-header">
+            <h3>Chikmagalur Pour-Over</h3>
+            <span class="price">₹240</span>
+          </div>
+          <p>Washed Arabica brewed on V60 with notes of dark cocoa and roasted hazelnut.</p>
+        </article>
+        <article class="menu-card">
+          <div class="menu-card-header">
+            <h3>Cardamom Cortado</h3>
+            <span class="price">₹220</span>
+          </div>
+          <p>Double ristretto balanced with textured oat or whole milk and crushed green cardamom.</p>
+        </article>
+        <article class="menu-card">
+          <div class="menu-card-header">
+            <h3>Smoked Chili Sourdough</h3>
+            <span class="price">₹340</span>
+          </div>
+          <p>House-fermented country loaf with whipped ricotta, chili oil, and toasted sesame.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="hours-section" class="section">
+      <h2>Hours &amp; Location</h2>
+      <div class="info-bar">
+        <div>
+          <div class="info-label">Opening Hours</div>
+          <p id="opening-hours">Daily: 7:30 AM – 9:00 PM</p>
+        </div>
+        <div>
+          <div class="info-label">Address</div>
+          <p id="cafe-address">12th Main Road, HAL 2nd Stage, Indiranagar, Bengaluru</p>
+        </div>
+        <div>
+          <div class="info-label">Contact</div>
+          <p id="cafe-phone">+91 80 4123 9000</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 <span id="footer-brand">@DEVVYSHRAWAN</span>. All rights reserved.</p>
+  </footer>
+
+  <!-- CRITICAL INTERACTIVE COMPONENT: Must remain functional after all AI edits -->
+  <div id="booking-modal" class="modal-backdrop" data-runtime-contract="booking-v1" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="booking-modal-title">
+      <button id="close-booking-btn" class="modal-close" type="button" aria-label="Close modal">&times;</button>
+      <h2 id="booking-modal-title" style="margin-bottom: 1.25rem;">Reserve a Table</h2>
+      <form id="booking-form">
+        <div class="form-group">
+          <label for="guest-name">Full Name</label>
+          <input id="guest-name" name="guest_name" type="text" required placeholder="Aarav Sharma" />
+        </div>
+        <div class="form-group">
+          <label for="guest-count">Party Size</label>
+          <select id="guest-count" name="guest_count">
+            <option value="2">2 Guests</option>
+            <option value="4">4 Guests</option>
+            <option value="6">6 Guests</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="booking-time">Preferred Time</label>
+          <input id="booking-time" name="booking_time" type="time" required value="19:00" />
+        </div>
+        <button id="submit-booking-btn" class="btn-primary" type="submit" style="width: 100%; border-radius: 12px; margin-top: 0.5rem;">
+          Confirm Reservation
+        </button>
+      </form>
+      <div id="booking-confirmation" role="status"></div>
+    </div>
+  </div>
+
+  <script id="booking-runtime-script" data-runtime-contract="booking-v1">
+    (function () {
+      const modal = document.getElementById("booking-modal");
+      const openBtn = document.getElementById("open-booking-btn");
+      const heroBtn = document.getElementById("hero-booking-btn");
+      const closeBtn = document.getElementById("close-booking-btn");
+      const form = document.getElementById("booking-form");
+      const confirmation = document.getElementById("booking-confirmation");
+
+      function openModal() {
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        confirmation.style.display = "none";
+      }
+
+      function closeModal() {
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+      }
+
+      if (openBtn) openBtn.addEventListener("click", openModal);
+      if (heroBtn) heroBtn.addEventListener("click", openModal);
+      if (closeBtn) closeBtn.addEventListener("click", closeModal);
+
+      if (modal) {
+        modal.addEventListener("click", function (event) {
+          if (event.target === modal) closeModal();
+        });
+      }
+
+      if (form) {
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const name = document.getElementById("guest-name").value.trim();
+          const guests = document.getElementById("guest-count").value;
+          const time = document.getElementById("booking-time").value;
+          if (!name) return;
+          confirmation.textContent =
+            "Confirmed for " + name + " (" + guests + " guests) at " + time + ". See you soon!";
+          confirmation.style.display = "block";
+          form.reset();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

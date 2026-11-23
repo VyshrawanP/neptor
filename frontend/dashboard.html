@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@DEVVYSHRAWAN — AI Website Editor Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #000000;
+            --bg-sidebar: #04060b;
+            --bg-chat: #010204;
+            --bg-preview: #000000;
+            --card-surface: rgba(18, 24, 38, 0.78);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --accent: #00e5ff;
+            --accent-hover: #38bdf8;
+            --accent-glow: rgba(0, 229, 255, 0.35);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.25);
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background: var(--bg-base); color: var(--text-primary); height: 100vh; overflow: hidden; display: flex; }
+
+        /* Left Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .sidebar-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            color: #ffffff;
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        .sidebar-brand h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+        .sidebar-brand p { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+
+        .btn-new-chat {
+            margin: 16px 20px;
+            padding: 10px 16px;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-new-chat:hover { background: #1a2542; border-color: var(--accent); }
+
+        .sidebar-section-title {
+            padding: 8px 20px 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 12px;
+        }
+
+        .conv-item {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.15s ease;
+        }
+
+        .conv-item:hover { background: rgba(255, 255, 255, 0.04); color: var(--text-primary); }
+        .conv-item.active { background: rgba(59, 130, 246, 0.12); color: #60a5fa; font-weight: 600; }
+
+        .sidebar-menu {
+            padding: 12px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .menu-link:hover { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); }
+
+        .sidebar-profile {
+            padding: 14px 16px;
+            background: #090d16;
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .profile-info { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1e293b;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .profile-email { font-size: 12px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Main Chat Area */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-chat);
+            position: relative;
+            min-width: 360px;
+        }
+
+        .chat-header {
+            padding: 16px 24px;
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title-group h1 { font-size: 15px; font-weight: 700; }
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #4ade80;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .welcome-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            margin: auto;
+            max-width: 580px;
+        }
+
+        .welcome-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .welcome-card p { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.5; }
+
+        .prompt-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .prompt-chip {
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .prompt-chip:hover {
+            border-color: var(--accent);
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .message-row {
+            display: flex;
+            gap: 12px;
+            max-width: 85%;
+        }
+
+        .message-row.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-row.assistant {
+            align-self: flex-start;
+        }
+
+        .msg-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .message-row.user .msg-avatar {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .message-row.assistant .msg-avatar {
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            color: #fff;
+        }
+
+        .msg-bubble {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            line-height: 1.55;
+        }
+
+        .message-row.user .msg-bubble {
+            background: var(--accent);
+            color: #ffffff;
+            border-bottom-right-radius: 2px;
+        }
+
+        .message-row.assistant .msg-bubble {
+            background: var(--card-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+            border-bottom-left-radius: 2px;
+        }
+
+        .msg-summary-card {
+            margin-top: 10px;
+            background: #090d16;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 12px;
+        }
+
+        .msg-summary-title { font-weight: 600; color: #38bdf8; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            padding: 12px 16px;
+            border-radius: 12px;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #60a5fa;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        /* Input Area */
+        .chat-input-bar {
+            padding: 16px 24px;
+            background: var(--bg-sidebar);
+            border-top: 1px solid var(--card-border);
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: flex-end;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 8px 12px;
+            gap: 10px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .chat-textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 13.5px;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+            max-height: 140px;
+            min-height: 24px;
+        }
+
+        .btn-send {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-send:hover { background: var(--accent-hover); }
+        .btn-send:disabled { background: #334155; cursor: not-allowed; opacity: 0.6; }
+
+        /* Right Preview Panel */
+        .preview-panel {
+            width: 48%;
+            min-width: 440px;
+            background: var(--bg-preview);
+            border-left: 1px solid var(--card-border);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .preview-toolbar {
+            padding: 12px 20px;
+            background: var(--bg-sidebar);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toolbar-group { display: flex; align-items: center; gap: 8px; }
+
+        .btn-toggle {
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-toggle:hover { color: var(--text-primary); }
+        .btn-toggle.active { background: #1e3a8a; color: #93c5fd; border-color: #3b82f6; }
+
+        .preview-content {
+            flex: 1;
+            position: relative;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 12px;
+        }
+
+        .viewport-wrapper {
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .viewport-wrapper.mobile {
+            width: 375px;
+            height: 720px;
+            border: 8px solid #1e293b;
+            border-radius: 36px;
+        }
+
+        .preview-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #ffffff;
+        }
+
+        .diff-container-view {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background: #0f172a;
+            padding: 16px;
+            display: none;
+        }
+
+        /* Pending Draft Action Bar */
+        .pending-bar {
+            background: var(--card-surface);
+            border-top: 1px solid var(--card-border);
+            padding: 16px 20px;
+            display: none;
+            box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .pending-bar.active { display: block; animation: slideUp 0.25s ease; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .pending-bar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .draft-badge {
+            background: #d97706;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .pending-summary {
+            font-size: 12.5px;
+            color: var(--text-primary);
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }
+
+        .qa-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .qa-pill {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-accept {
+            background: var(--success);
+            color: #ffffff;
+            box-shadow: 0 4px 12px var(--success-glow);
+        }
+
+        .btn-accept:hover { background: #16a34a; }
+
+        .btn-reject {
+            background: #334155;
+            color: #cbd5e1;
+        }
+
+        .btn-reject:hover { background: #475569; color: #ffffff; }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-card {
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .version-row {
+            padding: 12px 14px;
+            background: #090d16;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .version-tag { font-weight: 700; color: #60a5fa; font-size: 13px; }
+        .version-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            display: none;
+            z-index: 200;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .toast-success { background: #15803d; color: #fff; }
+        .toast-error { background: #b91c1c; color: #fff; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">@D</div>
+            <div class="sidebar-brand">
+                <h2>@DEVVYSHRAWAN</h2>
+                <p>AI Website Editor</p>
+            </div>
+        </div>
+
+        <button class="btn-new-chat" id="newChatBtn" onclick="startNewConversation()">
+            <span>+</span>
+            <span>New Conversation</span>
+        </button>
+
+        <div class="sidebar-section-title">Past Conversations</div>
+        <div class="conversations-list" id="conversationsList">
+            <!-- Dynamic conversation list -->
+        </div>
+
+        <div class="sidebar-menu">
+            <a class="menu-link" href="/site/admin@neptor.in" target="_blank" rel="noopener">
+                <span>↗</span>
+                <span>Open Live Website</span>
+            </a>
+            <button class="menu-link" onclick="openVersionHistory()">
+                <span>⏱</span>
+                <span>Version History</span>
+            </button>
+        </div>
+
+        <div class="sidebar-profile">
+            <div class="profile-info">
+                <div class="avatar">A</div>
+                <div class="profile-email">admin@neptor.in</div>
+            </div>
+            <button class="menu-link" style="width: auto; padding: 4px;" title="Change Password" onclick="openPasswordModal()">⚙</button>
+            <button class="menu-link" style="width: auto; padding: 4px; color: #f87171;" title="Sign Out" onclick="logoutAdmin()">🚪</button>
+        </div>
+    </aside>
+
+    <!-- Center Chat -->
+    <main class="chat-container">
+        <header class="chat-header">
+            <div class="chat-title-group">
+                <h1 id="activeChatTitle">Website Editing Assistant</h1>
+            </div>
+            <div class="status-pill">
+                <span class="status-dot"></span>
+                <span>Groq AI Ready</span>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-card" id="welcomeCard">
+                <h2>What would you like to change on your website?</h2>
+                <p>Type your instructions in plain English. The AI will generate a safe draft and let you review before/after comparisons before publishing.</p>
+                <div class="prompt-chips">
+                    <button class="prompt-chip" onclick="applySuggestion('Change the entire website theme to pink.')">Theme to Pink</button>
+                    <button class="prompt-chip" onclick="applySuggestion('Make the navbar dark blue.')">Dark Blue Navbar</button>
+                    <button class="prompt-chip" onclick="applySuggestion('Change the hero section background to black.')">Black Hero Section</button>
+                    <button class="prompt-chip" onclick="applySuggestion('Make all buttons rounded.')">Rounded Buttons</button>
+                    <button class="prompt-chip" onclick="applySuggestion('Increase the heading font size.')">Larger Headings</button>
+                    <button class="prompt-chip" onclick="applySuggestion('Add Iced Matcha Latte for Rs 280 to the signature menu.')">Add Matcha Latte</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <span style="font-size: 12px; color: #94a3b8; margin-left: 6px;">AI is editing HTML &amp; validating reservation safety...</span>
+        </div>
+
+        <div class="chat-input-bar">
+            <div class="input-wrapper">
+                <textarea class="chat-textarea" id="chatInput" placeholder="Describe the changes you want (e.g. 'Make the buttons rounded and change accent to dark emerald')..." rows="1"></textarea>
+                <button class="btn-send" id="sendBtn" onclick="handleSendMessage()">➤</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Right Preview Panel -->
+    <section class="preview-panel">
+        <div class="preview-toolbar">
+            <div class="toolbar-group">
+                <button class="btn-toggle active" id="btnModeLive" onclick="setPreviewMode('live')">Live Site</button>
+                <button class="btn-toggle" id="btnModeProposed" onclick="setPreviewMode('proposed')">Proposed Draft</button>
+                <button class="btn-toggle" id="btnModeDiff" onclick="setPreviewMode('diff')">HTML Diff</button>
+            </div>
+            <div class="toolbar-group">
+                <button class="btn-toggle active" id="btnDeviceDesktop" onclick="setDeviceMode('desktop')">Desktop</button>
+                <button class="btn-toggle" id="btnDeviceMobile" onclick="setDeviceMode('mobile')">Mobile</button>
+                <button class="btn-toggle" title="Refresh Preview" onclick="refreshPreview()">↻</button>
+            </div>
+        </div>
+
+        <div class="preview-content">
+            <div class="viewport-wrapper" id="viewportWrapper">
+                <iframe class="preview-iframe" id="previewIframe" sandbox="allow-same-origin allow-forms" src="/site/admin@neptor.in"></iframe>
+                <div class="diff-container-view" id="diffView"></div>
+            </div>
+        </div>
+
+        <!-- Pending Draft Action Banner -->
+        <div class="pending-bar" id="pendingBar">
+            <div class="pending-bar-header">
+                <div>
+                    <span class="draft-badge">Pending Approval</span>
+                    <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;" id="pendingDraftMeta"></span>
+                </div>
+                <div class="qa-badges">
+                    <span class="qa-pill">✓ HTML Valid</span>
+                    <span class="qa-pill">✓ Booking IDs Intact</span>
+                    <span class="qa-pill">✓ Runtime Script Safe</span>
+                </div>
+            </div>
+            <div class="pending-summary" id="pendingSummaryText">Proposed changes ready for review.</div>
+            <div class="action-buttons">
+                <button class="btn-action btn-reject" id="btnRejectDraft" onclick="submitDraftDecision(false)">Reject Changes</button>
+                <button class="btn-action btn-accept" id="btnAcceptDraft" onclick="submitDraftDecision(true)">Accept &amp; Publish</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Version History Modal -->
+    <div class="modal-overlay" id="versionModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Website Version History</h3>
+                <button class="btn-close" onclick="closeVersionHistory()">&times;</button>
+            </div>
+            <div class="modal-body" id="versionListContent">
+                <!-- Dynamic version items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal-card" style="max-width: 420px;">
+            <div class="modal-header">
+                <h3>Change Administrator Password</h3>
+                <button class="btn-close" onclick="closePasswordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+                    <div style="margin-bottom: 14px;">
+                        <label style="display:block; font-size: 12px; color: #94a3b8; margin-bottom: 6px;">Current Password</label>
+                        <input type="password" id="oldPassword" required style="width: 100%; padding: 10px; background: #090d16; border: 1px solid #1e293b; border-radius: 6px; color: #fff;">
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label style="display:block; font-size: 12px; color: #94a3b8; margin-bottom: 6px;">New Password</label>
+                        <input type="password" id="newPassword" required minlength="6" style="width: 100%; padding: 10px; background: #090d16; border: 1px solid #1e293b; border-radius: 6px; color: #fff;">
+                    </div>
+                    <button type="submit" class="btn-action btn-accept" style="width: 100%; margin-top: 10px;">Update Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const USER_ID = "admin@neptor.in";
+        let currentConversationId = null;
+        let activeDraft = null;
+        let previewMode = "live"; // 'live' | 'proposed' | 'diff'
+        let deviceMode = "desktop"; // 'desktop' | 'mobile'
+
+        // Elements
+        const chatMessages = document.getElementById("chatMessages");
+        const chatInput = document.getElementById("chatInput");
+        const sendBtn = document.getElementById("sendBtn");
+        const typingIndicator = document.getElementById("typingIndicator");
+        const previewIframe = document.getElementById("previewIframe");
+        const diffView = document.getElementById("diffView");
+        const viewportWrapper = document.getElementById("viewportWrapper");
+        const pendingBar = document.getElementById("pendingBar");
+        const pendingSummaryText = document.getElementById("pendingSummaryText");
+        const pendingDraftMeta = document.getElementById("pendingDraftMeta");
+
+        // Initialization
+        window.addEventListener("DOMContentLoaded", async () => {
+            await loadConversations();
+            await checkPendingDraft();
+            setupInputListener();
+        });
+
+        function setupInputListener() {
+            chatInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage();
+                }
+            });
+            chatInput.addEventListener("input", () => {
+                chatInput.style.height = "auto";
+                chatInput.style.height = Math.min(chatInput.scrollHeight, 140) + "px";
+            });
+        }
+
+        async function loadConversations() {
+            try {
+                const res = await fetch("/admin/conversations");
+                if (res.status === 401) {
+                    window.location.href = "/admin/login";
+                    return;
+                }
+                const convs = await res.json();
+                const container = document.getElementById("conversationsList");
+                container.innerHTML = "";
+                if (convs && convs.length > 0) {
+                    convs.forEach((c, idx) => {
+                        const item = document.createElement("div");
+                        item.className = "conv-item" + (idx === 0 ? " active" : "");
+                        item.textContent = c.title || "Editing Session";
+                        item.onclick = () => selectConversation(c.id, c.title);
+                        container.appendChild(item);
+                    });
+                    currentConversationId = convs[0].id;
+                    await loadMessages(currentConversationId);
+                } else {
+                    await startNewConversation();
+                }
+            } catch (err) {
+                console.error("Failed to load conversations:", err);
+            }
+        }
+
+        async function selectConversation(convId, title) {
+            currentConversationId = convId;
+            document.querySelectorAll(".conv-item").forEach(el => el.classList.remove("active"));
+            event.target.classList.add("active");
+            document.getElementById("activeChatTitle").textContent = title || "Website Editing Assistant";
+            await loadMessages(convId);
+        }
+
+        async function startNewConversation() {
+            try {
+                const res = await fetch("/admin/conversations", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ title: "Session " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) })
+                });
+                const conv = await res.json();
+                currentConversationId = conv.id;
+                document.getElementById("activeChatTitle").textContent = conv.title;
+                chatMessages.innerHTML = `
+                    <div class="welcome-card" id="welcomeCard">
+                        <h2>What would you like to change on your website?</h2>
+                        <p>Type your instructions in plain English. The AI will generate a safe draft and let you review before/after comparisons before publishing.</p>
+                        <div class="prompt-chips">
+                            <button class="prompt-chip" onclick="applySuggestion('Change the entire website theme to pink.')">Theme to Pink</button>
+                            <button class="prompt-chip" onclick="applySuggestion('Make the navbar dark blue.')">Dark Blue Navbar</button>
+                            <button class="prompt-chip" onclick="applySuggestion('Change the hero section background to black.')">Black Hero Section</button>
+                            <button class="prompt-chip" onclick="applySuggestion('Make all buttons rounded.')">Rounded Buttons</button>
+                            <button class="prompt-chip" onclick="applySuggestion('Increase the heading font size.')">Larger Headings</button>
+                        </div>
+                    </div>
+                `;
+                await loadConversations();
+            } catch (err) {
+                console.error("Error creating conversation:", err);
+            }
+        }
+
+        async function loadMessages(convId) {
+            try {
+                const res = await fetch(`/admin/conversations/${convId}/messages`);
+                const msgs = await res.json();
+                chatMessages.innerHTML = "";
+                if (!msgs || msgs.length === 0) {
+                    chatMessages.innerHTML = `
+                        <div class="welcome-card">
+                            <h2>What would you like to change on your website?</h2>
+                            <p>Type your instructions in plain English. The AI will generate a safe draft and let you review before/after comparisons before publishing.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                msgs.forEach(m => appendMessageToUI(m.sender, m.message, m.draft_id));
+            } catch (err) {
+                console.error("Failed to load messages:", err);
+            }
+        }
+
+        function appendMessageToUI(sender, text, draftId = null, summary = null) {
+            const welcome = document.getElementById("welcomeCard");
+            if (welcome) welcome.style.display = "none";
+
+            const row = document.createElement("div");
+            row.className = `message-row ${sender}`;
+
+            const avatar = document.createElement("div");
+            avatar.className = "msg-avatar";
+            avatar.textContent = sender === "user" ? "U" : "AI";
+
+            const bubble = document.createElement("div");
+            bubble.className = "msg-bubble";
+            bubble.textContent = text;
+
+            if (draftId && summary) {
+                const summaryCard = document.createElement("div");
+                summaryCard.className = "msg-summary-card";
+                summaryCard.innerHTML = `
+                    <div class="msg-summary-title">⚡ AI Proposed Modifications</div>
+                    <div>${summary}</div>
+                    <button style="margin-top: 8px; background: #1e3a8a; border: 1px solid #3b82f6; color: #93c5fd; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer;" onclick="setPreviewMode('proposed')">Preview Proposed Draft →</button>
+                `;
+                bubble.appendChild(summaryCard);
+            }
+
+            row.appendChild(avatar);
+            row.appendChild(bubble);
+            chatMessages.appendChild(row);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function applySuggestion(text) {
+            chatInput.value = text;
+            chatInput.focus();
+        }
+
+        async function handleSendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            chatInput.value = "";
+            chatInput.style.height = "auto";
+            appendMessageToUI("user", message);
+
+            sendBtn.disabled = true;
+            typingIndicator.style.display = "flex";
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            try {
+                // Call webhook API through admin conversational endpoint or direct webhook
+                const res = await fetch("/webhook", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_id: USER_ID, message })
+                });
+
+                const data = await res.json();
+                typingIndicator.style.display = "none";
+                sendBtn.disabled = false;
+
+                if (res.ok) {
+                    appendMessageToUI("assistant", data.reply, data.draft_id, data.change_summary);
+
+                    // Save to conversation history if active
+                    if (currentConversationId) {
+                        fetch(`/admin/conversations/${currentConversationId}/messages`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ message: "USER: " + message + " || AI: " + data.reply })
+                        }).catch(e => console.log(e));
+                    }
+
+                    if (data.status === "pending" && data.draft_id) {
+                        await checkPendingDraft();
+                        setPreviewMode("proposed");
+                        showToast("New draft generated! Review before publishing.", "success");
+                    } else if (data.status === "rolled_back") {
+                        refreshPreview();
+                        showToast("Website rolled back to previous version.", "success");
+                    }
+                } else {
+                    appendMessageToUI("assistant", "Error: " + (data.detail || "Unable to process request."));
+                    showToast("Error processing request", "error");
+                }
+            } catch (err) {
+                typingIndicator.style.display = "none";
+                sendBtn.disabled = false;
+                appendMessageToUI("assistant", "Network error: Unable to connect to backend service.");
+                showToast("Network error", "error");
+            }
+        }
+
+        async function checkPendingDraft() {
+            try {
+                const res = await fetch(`/preview/${USER_ID}`);
+                if (res.ok) {
+                    const draft = await res.json();
+                    activeDraft = draft;
+                    pendingBar.classList.add("active");
+                    pendingSummaryText.textContent = draft.change_summary || "Proposed changes ready for review.";
+                    pendingDraftMeta.textContent = `Draft: ${draft.draft_id} (v${draft.base_version} → v${draft.base_version + 1})`;
+                    diffView.innerHTML = draft.html_diff || "<p style='color: #94a3b8;'>No diff available.</p>";
+                } else {
+                    activeDraft = null;
+                    pendingBar.classList.remove("active");
+                }
+            } catch (err) {
+                console.error("Error checking draft:", err);
+            }
+        }
+
+        function setPreviewMode(mode) {
+            previewMode = mode;
+            document.querySelectorAll("#btnModeLive, #btnModeProposed, #btnModeDiff").forEach(b => b.classList.remove("active"));
+            
+            if (mode === "live") {
+                document.getElementById("btnModeLive").classList.add("active");
+                previewIframe.style.display = "block";
+                diffView.style.display = "none";
+                previewIframe.src = `/site/${USER_ID}?t=` + Date.now();
+            } else if (mode === "proposed") {
+                document.getElementById("btnModeProposed").classList.add("active");
+                previewIframe.style.display = "block";
+                diffView.style.display = "none";
+                previewIframe.src = `/preview/${USER_ID}/render?t=` + Date.now();
+            } else if (mode === "diff") {
+                document.getElementById("btnModeDiff").classList.add("active");
+                previewIframe.style.display = "none";
+                diffView.style.display = "block";
+            }
+        }
+
+        function setDeviceMode(mode) {
+            deviceMode = mode;
+            document.querySelectorAll("#btnDeviceDesktop, #btnDeviceMobile").forEach(b => b.classList.remove("active"));
+            if (mode === "desktop") {
+                document.getElementById("btnDeviceDesktop").classList.add("active");
+                viewportWrapper.classList.remove("mobile");
+            } else {
+                document.getElementById("btnDeviceMobile").classList.add("active");
+                viewportWrapper.classList.add("mobile");
+            }
+        }
+
+        function refreshPreview() {
+            setPreviewMode(previewMode);
+        }
+
+        async function submitDraftDecision(approve) {
+            if (!activeDraft) return;
+
+            const url = approve ? `/approve/${USER_ID}` : `/reject/${USER_ID}`;
+            const btn = approve ? document.getElementById("btnAcceptDraft") : document.getElementById("btnRejectDraft");
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ draft_id: activeDraft.draft_id })
+                });
+
+                const data = await res.json();
+                btn.disabled = false;
+
+                if (res.ok) {
+                    showToast(data.message || (approve ? "Published successfully!" : "Draft rejected."), "success");
+                    pendingBar.classList.remove("active");
+                    activeDraft = null;
+                    setPreviewMode("live");
+                    appendMessageToUI("assistant", approve ? `Website published as version ${data.version}!` : "Proposed draft discarded. Live site remains unchanged.");
+                } else {
+                    showToast(data.detail || "Action failed.", "error");
+                }
+            } catch (err) {
+                btn.disabled = false;
+                showToast("Network error: " + err.message, "error");
+            }
+        }
+
+        async function openVersionHistory() {
+            const modal = document.getElementById("versionModal");
+            const container = document.getElementById("versionListContent");
+            modal.classList.add("open");
+            container.innerHTML = "<p style='color: #94a3b8; text-align: center;'>Loading versions...</p>";
+
+            try {
+                const res = await fetch(`/versions/${USER_ID}`);
+                const versions = await res.json();
+                container.innerHTML = "";
+
+                if (!versions || versions.length === 0) {
+                    container.innerHTML = "<p style='color: #94a3b8; text-align: center;'>No version history found.</p>";
+                    return;
+                }
+
+                versions.forEach(v => {
+                    const row = document.createElement("div");
+                    row.className = "version-row";
+                    row.innerHTML = `
+                        <div>
+                            <div class="version-tag">Version ${v.version}</div>
+                            <div class="version-meta">${new Date(v.created_at).toLocaleString()} &bull; ${v.instruction || "No description"}</div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-toggle" onclick="previewHistoricalVersion(${v.version})">View</button>
+                            <button class="btn-toggle" style="color: #60a5fa;" onclick="restoreHistoricalVersion(${v.version})">Restore</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            } catch (err) {
+                container.innerHTML = "<p style='color: #f87171;'>Failed to load versions.</p>";
+            }
+        }
+
+        function closeVersionHistory() {
+            document.getElementById("versionModal").classList.remove("open");
+        }
+
+        function previewHistoricalVersion(ver) {
+            closeVersionHistory();
+            previewIframe.style.display = "block";
+            diffView.style.display = "none";
+            previewIframe.src = `/versions/${USER_ID}/${ver}`;
+            showToast(`Displaying preview of historical Version ${ver}`, "success");
+        }
+
+        async function restoreHistoricalVersion(ver) {
+            if (!confirm(`Are you sure you want to restore published Version ${ver} to the live website?`)) return;
+            try {
+                const res = await fetch(`/versions/${USER_ID}/restore/${ver}`, { method: "POST" });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(data.message, "success");
+                    closeVersionHistory();
+                    setPreviewMode("live");
+                    appendMessageToUI("assistant", `Restored Version ${ver} to live website.`);
+                } else {
+                    showToast(data.detail || "Restore failed.", "error");
+                }
+            } catch (err) {
+                showToast("Network error: " + err.message, "error");
+            }
+        }
+
+        function openPasswordModal() {
+            document.getElementById("passwordModal").classList.add("open");
+        }
+
+        function closePasswordModal() {
+            document.getElementById("passwordModal").classList.remove("open");
+        }
+
+        async function handleChangePassword(e) {
+            e.preventDefault();
+            const oldPassword = document.getElementById("oldPassword").value;
+            const newPassword = document.getElementById("newPassword").value;
+
+            try {
+                const res = await fetch("/admin/change-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ old_password: oldPassword, new_password: newPassword })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast("Password updated successfully!", "success");
+                    closePasswordModal();
+                } else {
+                    showToast(data.detail || "Failed to change password.", "error");
+                }
+            } catch (err) {
+                showToast("Network error: " + err.message, "error");
+            }
+        }
+
+        async function logoutAdmin() {
+            try {
+                await fetch("/logout", { method: "POST" });
+            } finally {
+                window.location.href = "/admin/login";
+            }
+        }
+
+        function showToast(message, type = "success") {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = `toast ${type === "success" ? "toast-success" : "toast-error"}`;
+            toast.style.display = "block";
+            setTimeout(() => { toast.style.display = "none"; }, 3500);
+        }
+    </script>
+</body>
+</html>
