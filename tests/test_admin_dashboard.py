@@ -305,3 +305,40 @@ def test_concurrency1_user_and_strict_isolation(client, monkeypatch):
     assert admin_live.headers["X-Website-Version"] == "1"
     assert "#10b981" not in admin_live.text
     assert "#00e5ff" in admin_live.text
+
+    # 8. Authenticate concurrency2 and verify 3-way isolation
+    login_c2 = client.post("/login", json={"email": "concurrency2", "password": "neptor123"})
+    assert login_c2.status_code == 200
+
+    # concurrency2 starts with baseline version 1
+    site_c2 = client.get("/site/concurrency2")
+    assert site_c2.status_code == 200
+    assert site_c2.headers["X-Website-Version"] == "1"
+
+    # concurrency2 makes a distinct edit (amber accent color)
+    async def mock_c2_edit(instruction, current_html, llm=None):
+        return current_html.replace("--accent-color: #00e5ff;", "--accent-color: #f59e0b;")
+
+    monkeypatch.setattr("app.main.generate_modified_html", mock_c2_edit)
+
+    wh_c2 = client.post("/webhook", json={"user_id": "concurrency2", "message": "Set accent to amber"})
+    draft_c2_id = wh_c2.json()["draft_id"]
+    client.post("/approve/concurrency2", json={"draft_id": draft_c2_id})
+
+    # concurrency2 is now version 2 with amber
+    c2_live = client.get("/site/concurrency2")
+    assert c2_live.headers["X-Website-Version"] == "2"
+    assert "#f59e0b" in c2_live.text
+
+    # concurrency1 is STILL emerald (#10b981)
+    c1_check = client.get("/site/concurrency1")
+    assert c1_check.headers["X-Website-Version"] == "2"
+    assert "#10b981" in c1_check.text
+    assert "#f59e0b" not in c1_check.text
+
+    # admin@neptor.in is STILL baseline cyan (#00e5ff) at version 1
+    admin_check = client.get("/site/admin@neptor.in")
+    assert admin_check.headers["X-Website-Version"] == "1"
+    assert "#00e5ff" in admin_check.text
+    assert "#10b981" not in admin_check.text
+    assert "#f59e0b" not in admin_check.text

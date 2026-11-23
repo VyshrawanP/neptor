@@ -49,6 +49,8 @@ def seed_initial_admin(db_path: Optional[str] = None) -> None:
         (ADMIN_EMAIL, ADMIN_INITIAL_PASSWORD),
         ("concurrency1", "neptor123"),
         ("concurrency1@neptor.in", "neptor123"),
+        ("concurrency2", "neptor123"),
+        ("concurrency2@neptor.in", "neptor123"),
     ]
     for email, pwd in demo_users:
         existing = get_admin_by_email(email, db_path=db_path)
