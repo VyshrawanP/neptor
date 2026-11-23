@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@DEVVYSHRAWAN — Admin Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-deep: #020307;
@@ -46,7 +49,7 @@
             padding: 24px;
             position: relative;
             overflow-x: hidden;
-            background-image: 
+            background-image:
                 radial-gradient(ellipse 90% 60% at 20% -10%, rgba(244, 114, 182, 0.12), transparent 70%),
                 radial-gradient(ellipse 80% 50% at 85% 110%, rgba(52, 211, 153, 0.1), transparent 70%),
                 radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.05), transparent 80%);
@@ -103,9 +106,20 @@
         }
 
         @keyframes pulseOrb {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.45; }
-            50% { transform: scale(1.15) translate(30px, -20px); opacity: 0.7; }
-            100% { transform: scale(0.95) translate(-25px, 25px); opacity: 0.45; }
+            0% {
+                transform: scale(1) translate(0, 0);
+                opacity: 0.45;
+            }
+
+            50% {
+                transform: scale(1.15) translate(30px, -20px);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(0.95) translate(-25px, 25px);
+                opacity: 0.45;
+            }
         }
 
         /* Main Majestic Sanctuary Container */
@@ -122,7 +136,7 @@
             backdrop-filter: blur(28px) saturate(190%);
             -webkit-backdrop-filter: blur(28px) saturate(190%);
             border: 1px solid var(--glass-border);
-            box-shadow: 
+            box-shadow:
                 0 30px 80px -15px rgba(0, 0, 0, 0.85),
                 0 0 40px rgba(244, 114, 182, 0.12),
                 inset 0 1px 1px var(--glass-highlight);
@@ -131,8 +145,15 @@
         }
 
         @keyframes sanctuaryEntrance {
-            0% { opacity: 0; transform: scale(0.94) translateY(30px); }
-            100% { opacity: 1; transform: scale(1) translateY(0); }
+            0% {
+                opacity: 0;
+                transform: scale(0.94) translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         /* Shimmering Animated Card Outline */
@@ -152,8 +173,13 @@
         }
 
         @keyframes borderShimmer {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
         }
 
         /* Left Side: Botanical Art Sanctuary Showcase */
@@ -204,8 +230,13 @@
         }
 
         @keyframes floatPill {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-4px); }
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-4px);
+            }
         }
 
         .floral-brand-pill svg {
@@ -213,7 +244,9 @@
         }
 
         @keyframes spinFlower {
-            100% { transform: rotate(360deg); }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .showcase-title {
@@ -256,17 +289,42 @@
         }
 
         @keyframes breathingFlower {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.06) rotate(3deg); }
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.06) rotate(3deg);
+            }
         }
 
-        .petal-anim-1 { animation: petalSway 5s ease-in-out infinite alternate; transform-origin: center bottom; }
-        .petal-anim-2 { animation: petalSway 5s ease-in-out 1.2s infinite alternate; transform-origin: center bottom; }
-        .petal-anim-3 { animation: petalSway 5s ease-in-out 2.4s infinite alternate; transform-origin: center bottom; }
+        .petal-anim-1 {
+            animation: petalSway 5s ease-in-out infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        .petal-anim-2 {
+            animation: petalSway 5s ease-in-out 1.2s infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        .petal-anim-3 {
+            animation: petalSway 5s ease-in-out 2.4s infinite alternate;
+            transform-origin: center bottom;
+        }
 
         @keyframes petalSway {
-            0% { transform: rotate(0deg); opacity: 0.85; }
-            100% { transform: rotate(5deg) scale(1.04); opacity: 1; }
+            0% {
+                transform: rotate(0deg);
+                opacity: 0.85;
+            }
+
+            100% {
+                transform: rotate(5deg) scale(1.04);
+                opacity: 1;
+            }
         }
 
         /* Botanical Tags */
@@ -387,13 +445,13 @@
         .form-input:focus {
             border-color: var(--floral-rose);
             background: rgba(12, 16, 28, 0.85);
-            box-shadow: 
+            box-shadow:
                 0 0 0 3px rgba(244, 114, 182, 0.25),
                 0 0 20px rgba(244, 114, 182, 0.2),
                 inset 0 1px 1px rgba(255, 255, 255, 0.2);
         }
 
-        .form-input:focus + .input-icon,
+        .form-input:focus+.input-icon,
         .input-wrapper:focus-within .input-icon {
             color: var(--floral-rose);
         }
@@ -418,7 +476,7 @@
             justify-content: center;
             gap: 12px;
             margin-top: 28px;
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 1px rgba(255, 255, 255, 0.6),
                 0 12px 28px -6px rgba(236, 72, 153, 0.5),
                 0 0 20px rgba(0, 210, 255, 0.3);
@@ -427,9 +485,17 @@
         }
 
         @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         /* Glossy Specular Light Reflection Sweep */
@@ -447,14 +513,22 @@
         }
 
         @keyframes glossSweep {
-            0% { left: -60%; }
-            20% { left: 140%; }
-            100% { left: 140%; }
+            0% {
+                left: -60%;
+            }
+
+            20% {
+                left: 140%;
+            }
+
+            100% {
+                left: 140%;
+            }
         }
 
         .btn-submit:hover {
             transform: translateY(-2px) scale(1.01);
-            box-shadow: 
+            box-shadow:
                 inset 0 1px 1px rgba(255, 255, 255, 0.8),
                 0 16px 36px -4px rgba(236, 72, 153, 0.65),
                 0 0 28px rgba(0, 210, 255, 0.5);
@@ -481,8 +555,15 @@
         }
 
         @keyframes alertSlide {
-            0% { opacity: 0; transform: translateY(-8px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .alert-danger {
@@ -554,6 +635,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Falling Floral Petals Background Animation -->
@@ -566,7 +648,7 @@
 
     <!-- Grand Floral Sanctuary Wrapper -->
     <main class="sanctuary-wrapper">
-        
+
         <!-- Left Column: Botanical Art & Brand Showcase -->
         <section class="floral-showcase">
             <div class="showcase-bg-leaves"></div>
@@ -574,18 +656,21 @@
             <div class="showcase-header">
                 <div class="floral-brand-pill">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3" fill="#f472b6"/>
-                        <path d="M12 2C9 5 9 8 12 9C15 8 15 5 12 2Z" fill="#fbcfe8"/>
-                        <path d="M12 22C9 19 9 16 12 15C15 16 15 19 12 22Z" fill="#fbcfe8"/>
-                        <path d="M2 12C5 9 8 9 9 12C8 15 5 15 2 12Z" fill="#fbcfe8"/>
-                        <path d="M22 12C19 9 16 9 15 12C16 15 19 15 22 12Z" fill="#fbcfe8"/>
+                        <circle cx="12" cy="12" r="3" fill="#f472b6" />
+                        <path d="M12 2C9 5 9 8 12 9C15 8 15 5 12 2Z" fill="#fbcfe8" />
+                        <path d="M12 22C9 19 9 16 12 15C15 16 15 19 12 22Z" fill="#fbcfe8" />
+                        <path d="M2 12C5 9 8 9 9 12C8 15 5 15 2 12Z" fill="#fbcfe8" />
+                        <path d="M22 12C19 9 16 9 15 12C16 15 19 15 22 12Z" fill="#fbcfe8" />
                     </svg>
                     <span>Floral Sanctuary Engine</span>
                 </div>
-                
+
                 <h1 class="showcase-title">@DEVVYSHRAWAN</h1>
-                <p class="showcase-subtitle">"Where exquisite floral art breathes life into conversational web architecture."</p>
-                <div style="font-size: 11px; color: var(--text-muted); opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">Powered by Neptor Technologies AI Engine</div>
+                <p class="showcase-subtitle">"Where exquisite floral art breathes life into conversational web
+                    architecture."</p>
+                <div
+                    style="font-size: 11px; color: var(--text-muted); opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">
+                    Powered by Neptor Technologies AI Engine</div>
             </div>
 
             <!-- Central Animated Botanical Lotus / Flower -->
@@ -593,46 +678,52 @@
                 <svg class="blooming-lotus-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <radialGradient id="bloomGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#f472b6" stop-opacity="0.9"/>
-                            <stop offset="60%" stop-color="#8b5cf6" stop-opacity="0.6"/>
-                            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0"/>
+                            <stop offset="0%" stop-color="#f472b6" stop-opacity="0.9" />
+                            <stop offset="60%" stop-color="#8b5cf6" stop-opacity="0.6" />
+                            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0" />
                         </radialGradient>
                         <linearGradient id="petalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#fda4af"/>
-                            <stop offset="100%" stop-color="#e11d48"/>
+                            <stop offset="0%" stop-color="#fda4af" />
+                            <stop offset="100%" stop-color="#e11d48" />
                         </linearGradient>
                         <linearGradient id="petalGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#6ee7b7"/>
-                            <stop offset="100%" stop-color="#059669"/>
+                            <stop offset="0%" stop-color="#6ee7b7" />
+                            <stop offset="100%" stop-color="#059669" />
                         </linearGradient>
                         <linearGradient id="goldStem" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#fef08a"/>
-                            <stop offset="100%" stop-color="#f59e0b"/>
+                            <stop offset="0%" stop-color="#fef08a" />
+                            <stop offset="100%" stop-color="#f59e0b" />
                         </linearGradient>
                     </defs>
 
                     <!-- Background Aura Halo -->
-                    <circle cx="100" cy="100" r="75" fill="url(#bloomGlow)"/>
+                    <circle cx="100" cy="100" r="75" fill="url(#bloomGlow)" />
 
                     <!-- Delicate Botanical Vines / Tendrils -->
-                    <path d="M30 150 C 45 110, 75 130, 95 160" stroke="url(#goldStem)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 2"/>
-                    <path d="M170 150 C 155 110, 125 130, 105 160" stroke="url(#goldStem)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 2"/>
-                    <circle cx="95" cy="160" r="4" fill="#fbbf24"/>
-                    <circle cx="105" cy="160" r="4" fill="#fbbf24"/>
+                    <path d="M30 150 C 45 110, 75 130, 95 160" stroke="url(#goldStem)" stroke-width="2.5"
+                        stroke-linecap="round" stroke-dasharray="4 2" />
+                    <path d="M170 150 C 155 110, 125 130, 105 160" stroke="url(#goldStem)" stroke-width="2.5"
+                        stroke-linecap="round" stroke-dasharray="4 2" />
+                    <circle cx="95" cy="160" r="4" fill="#fbbf24" />
+                    <circle cx="105" cy="160" r="4" fill="#fbbf24" />
 
                     <!-- Outer Floral Petals -->
-                    <path class="petal-anim-1" d="M100 45 C 70 65, 60 110, 100 145 C 140 110, 130 65, 100 45 Z" fill="url(#petalGrad1)" opacity="0.85"/>
-                    <path class="petal-anim-2" d="M55 90 C 70 70, 115 85, 100 135 C 65 125, 45 105, 55 90 Z" fill="url(#petalGrad1)" opacity="0.75"/>
-                    <path class="petal-anim-3" d="M145 90 C 130 70, 85 85, 100 135 C 135 125, 155 105, 145 90 Z" fill="url(#petalGrad1)" opacity="0.75"/>
+                    <path class="petal-anim-1" d="M100 45 C 70 65, 60 110, 100 145 C 140 110, 130 65, 100 45 Z"
+                        fill="url(#petalGrad1)" opacity="0.85" />
+                    <path class="petal-anim-2" d="M55 90 C 70 70, 115 85, 100 135 C 65 125, 45 105, 55 90 Z"
+                        fill="url(#petalGrad1)" opacity="0.75" />
+                    <path class="petal-anim-3" d="M145 90 C 130 70, 85 85, 100 135 C 135 125, 155 105, 145 90 Z"
+                        fill="url(#petalGrad1)" opacity="0.75" />
 
                     <!-- Inner Delicate Petals -->
-                    <path d="M75 105 C 85 85, 115 85, 125 105 C 115 135, 85 135, 75 105 Z" fill="#fbcfe8" opacity="0.9"/>
-                    
+                    <path d="M75 105 C 85 85, 115 85, 125 105 C 115 135, 85 135, 75 105 Z" fill="#fbcfe8"
+                        opacity="0.9" />
+
                     <!-- Golden Core Stamen & Pistils -->
-                    <circle cx="100" cy="110" r="10" fill="#fbbf24" filter="drop-shadow(0 0 8px #fbbf24)"/>
-                    <circle cx="95" cy="106" r="3" fill="#ffffff"/>
-                    <circle cx="105" cy="106" r="3" fill="#ffffff"/>
-                    <circle cx="100" cy="114" r="3" fill="#ffffff"/>
+                    <circle cx="100" cy="110" r="10" fill="#fbbf24" filter="drop-shadow(0 0 8px #fbbf24)" />
+                    <circle cx="95" cy="106" r="3" fill="#ffffff" />
+                    <circle cx="105" cy="106" r="3" fill="#ffffff" />
+                    <circle cx="100" cy="114" r="3" fill="#ffffff" />
                 </svg>
             </div>
 
@@ -648,13 +739,17 @@
         <section class="login-panel">
             <div class="panel-header">
                 <span class="author-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <polygon
+                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                        </polygon>
                     </svg>
-                    Admin Console &bull; Master Sanctuary
+                    Master Administration Console
                 </span>
                 <h2 class="panel-title">Sign In</h2>
-                <p class="panel-desc">Authenticate to manage your AI website editor, draft previews, and live deployment sandboxes.</p>
+                <p class="panel-desc">Authenticate to manage your AI website editor, draft previews, and live deployment
+                    sandboxes.</p>
             </div>
 
             <div id="alertBox" class="alert-box alert-danger" role="alert"></div>
@@ -665,11 +760,12 @@
                         <span>Administrator Email</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
                             <rect width="20" height="16" x="2" y="4" rx="3"></rect>
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                         </svg>
-                        <input class="form-input" type="email" id="email" name="email" value="admin@neptor.in" required autofocus autocomplete="username" placeholder="admin@neptor.in" />
+                        <input class="form-input" type="text" id="email" name="email" value="admin@neptor.in" required autofocus autocomplete="username" placeholder="admin@neptor.in or concurrency1" />
                     </div>
                 </div>
 
@@ -678,17 +774,20 @@
                         <span>Master Password</span>
                     </label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
                             <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
-                        <input class="form-input" type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password" />
+                        <input class="form-input" type="password" id="password" name="password" placeholder="••••••••"
+                            required autocomplete="current-password" />
                     </div>
                 </div>
 
                 <button type="submit" id="submitBtn" class="btn-submit">
                     <span>Enter Sanctuary</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
@@ -697,11 +796,12 @@
 
             <div class="credentials-card">
                 <div class="credentials-info">
-                    <strong>Initial Credentials</strong><br>
-                    Email: <code>admin@neptor.in</code> &bull; Pass: <code>neptor123</code>
+                    <strong>Demo Accounts:</strong><br>
+                    &bull; User 1: <code>admin@neptor.in</code> &bull; Pass: <code>neptor123</code><br>
+                    &bull; User 2: <code>concurrency1</code> &bull; Pass: <code>neptor123</code> (Isolated Sandbox)
                 </div>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
             </div>
         </section>
@@ -727,10 +827,10 @@
 
             const petalColors = [
                 { r: 244, g: 114, b: 182, a: 0.75 }, // soft rose
-                { r: 251, g: 191, b: 36,  a: 0.65 }, // golden pollen
+                { r: 251, g: 191, b: 36, a: 0.65 }, // golden pollen
                 { r: 253, g: 164, b: 175, a: 0.8 },  // blush sakura
-                { r: 244, g: 63,  b: 94,  a: 0.65 }, // ruby petal
-                { r: 0,   g: 240, b: 255, a: 0.55 }, // aero cyan dewdrop
+                { r: 244, g: 63, b: 94, a: 0.65 }, // ruby petal
+                { r: 0, g: 240, b: 255, a: 0.55 }, // aero cyan dewdrop
             ];
 
             for (let i = 0; i < PETAL_COUNT; i++) {
@@ -846,4 +946,5 @@
         });
     </script>
 </body>
+
 </html>

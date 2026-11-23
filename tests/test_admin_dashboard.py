@@ -243,3 +243,65 @@ def test_complete_admin_dashboard_workflow(auth_client, monkeypatch):
     versions = auth_client.get("/versions/admin@neptor.in").json()
     assert len(versions) == 2
     assert versions[0]["version"] == 2
+
+
+def test_concurrency1_user_and_strict_isolation(client, monkeypatch):
+    """
+    Verifies that:
+    1. 'concurrency1' can authenticate with password 'neptor123'.
+    2. 'concurrency1' and 'admin@neptor.in' have completely independent websites.
+    3. Changes made and published by 'concurrency1' NEVER leak or alter 'admin@neptor.in'.
+    4. Drafts created by 'concurrency1' are isolated from 'admin@neptor.in'.
+    """
+    # 1. Authenticate concurrency1
+    login_res = client.post("/login", json={"email": "concurrency1", "password": "neptor123"})
+    assert login_res.status_code == 200
+    assert login_res.json()["status"] == "ok"
+
+    # Also test concurrency1@neptor.in
+    login_res2 = client.post("/login", json={"email": "concurrency1@neptor.in", "password": "neptor123"})
+    assert login_res2.status_code == 200
+
+    # 2. Both users start with version 1 baseline sites
+    site_admin = client.get("/site/admin@neptor.in")
+    assert site_admin.status_code == 200
+    assert site_admin.headers["X-Website-Version"] == "1"
+
+    site_c1 = client.get("/site/concurrency1")
+    assert site_c1.status_code == 200
+    assert site_c1.headers["X-Website-Version"] == "1"
+
+    # 3. concurrency1 requests an edit (e.g. emerald accent color)
+    async def mock_concurrency_edit(instruction, current_html, llm=None):
+        return current_html.replace("--accent-color: #00e5ff;", "--accent-color: #10b981;")
+
+    monkeypatch.setattr("app.main.generate_modified_html", mock_concurrency_edit)
+
+    wh_c1 = client.post("/webhook", json={
+        "user_id": "concurrency1",
+        "message": "Change accent color to emerald"
+    })
+    assert wh_c1.status_code == 200
+    data_c1 = wh_c1.json()
+    assert data_c1["status"] == "pending"
+    draft_c1_id = data_c1["draft_id"]
+
+    # 4. admin@neptor.in has NO pending draft
+    prev_admin = client.get("/preview/admin@neptor.in")
+    assert prev_admin.status_code == 404
+
+    # 5. concurrency1 approves draft -> becomes version 2
+    app_res = client.post("/approve/concurrency1", json={"draft_id": draft_c1_id})
+    assert app_res.status_code == 200
+    assert app_res.json()["version"] == 2
+
+    # 6. Verify concurrency1 site is version 2 with #10b981
+    c1_live = client.get("/site/concurrency1")
+    assert c1_live.headers["X-Website-Version"] == "2"
+    assert "#10b981" in c1_live.text
+
+    # 7. CRITICAL ISOLATION: admin@neptor.in's site remains 100% untouched at version 1!
+    admin_live = client.get("/site/admin@neptor.in")
+    assert admin_live.headers["X-Website-Version"] == "1"
+    assert "#10b981" not in admin_live.text
+    assert "#00e5ff" in admin_live.text

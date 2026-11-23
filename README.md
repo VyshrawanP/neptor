@@ -13,9 +13,9 @@ The application features a dedicated, modern, responsive administration dashboar
 
 ### 1.1 Admin Authentication & Login
 - **Login URL:** `/admin/login`
-- **Initial Credentials:**
-  - Email: `admin@neptor.in`
-  - Password: `neptor123`
+- **Demo Administrator Accounts:**
+  - Account 1: `admin@neptor.in` &bull; Password: `neptor123`
+  - Account 2: `concurrency1` &bull; Password: `neptor123` (Multi-User Concurrency & Strict Isolation Demo)
 - **Security Features:**
   - Passwords stored as secure hashes using `bcrypt` (12 rounds).
   - Server-side authentication using secure, HTTP-only session cookies (`neptor_admin_session`).

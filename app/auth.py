@@ -41,15 +41,22 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def seed_initial_admin(db_path: Optional[str] = None) -> None:
     """
-    Initializes the default administrator account if none exists.
-    Uses credentials from environment variables (defaults to admin@neptor.in / neptor123).
+    Initializes the default administrator accounts:
+    1. Primary admin from environment variables (admin@neptor.in / neptor123)
+    2. Concurrency demo accounts (concurrency1 and concurrency1@neptor.in / neptor123)
     """
-    existing = get_admin_by_email(ADMIN_EMAIL, db_path=db_path)
-    if not existing:
-        pwd_hash = hash_password(ADMIN_INITIAL_PASSWORD)
-        created = create_admin_user(ADMIN_EMAIL, pwd_hash, db_path=db_path)
-        if created:
-            logger.info("Seeded initial administrator account: %s", ADMIN_EMAIL)
+    demo_users = [
+        (ADMIN_EMAIL, ADMIN_INITIAL_PASSWORD),
+        ("concurrency1", "neptor123"),
+        ("concurrency1@neptor.in", "neptor123"),
+    ]
+    for email, pwd in demo_users:
+        existing = get_admin_by_email(email, db_path=db_path)
+        if not existing:
+            pwd_hash = hash_password(pwd)
+            created = create_admin_user(email, pwd_hash, db_path=db_path)
+            if created:
+                logger.info("Seeded administrator account: %s", email)
 
 
 def authenticate_admin(email: str, password: str, db_path: Optional[str] = None) -> Optional[Dict[str, Any]]:
