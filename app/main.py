@@ -181,6 +181,13 @@ async def logout(request: Request, response: Response):
     return {"status": "ok", "message": "Logged out successfully"}
 
 
+@app.get("/admin/me", summary="Current Admin Profile")
+async def get_admin_me(request: Request):
+    """Returns the email/identifier of the currently logged-in administrator."""
+    admin_email = require_admin(request)
+    return {"email": admin_email, "user_id": admin_email}
+
+
 @app.get("/admin/dashboard", summary="Admin AI Editor Dashboard")
 async def admin_dashboard(request: Request):
     """Serves the protected, responsive Admin Dashboard UI."""
@@ -190,7 +197,16 @@ async def admin_dashboard(request: Request):
     dash_file = Path(FRONTEND_DIR) / "dashboard.html"
     if not dash_file.is_file():
         raise HTTPException(status_code=404, detail="Dashboard template not found.")
-    return HTMLResponse(content=dash_file.read_text(encoding="utf-8"))
+
+    html_content = dash_file.read_text(encoding="utf-8")
+    # Dynamically bind dashboard UI to the authenticated administrator
+    html_content = html_content.replace('const USER_ID = "admin@neptor.in";', f'let USER_ID = "{admin}";')
+    html_content = html_content.replace('let USER_ID = "admin@neptor.in";', f'let USER_ID = "{admin}";')
+    html_content = html_content.replace('/site/admin@neptor.in', f'/site/{admin}')
+    html_content = html_content.replace('<div class="profile-email">admin@neptor.in</div>', f'<div class="profile-email">{admin}</div>')
+    initial = admin[0].upper() if admin else "A"
+    html_content = html_content.replace('<div class="avatar">A</div>', f'<div class="avatar">{initial}</div>')
+    return HTMLResponse(content=html_content)
 
 
 @app.post("/admin/change-password", summary="Change Admin Password")

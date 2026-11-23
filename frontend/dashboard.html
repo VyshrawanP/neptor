@@ -814,7 +814,7 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        const USER_ID = "admin@neptor.in";
+        let USER_ID = "admin@neptor.in";
         let currentConversationId = null;
         let activeDraft = null;
         let previewMode = "live"; // 'live' | 'proposed' | 'diff'
@@ -834,6 +834,28 @@
 
         // Initialization
         window.addEventListener("DOMContentLoaded", async () => {
+            // Dynamically resolve authenticated administrator profile
+            try {
+                const meRes = await fetch("/admin/me");
+                if (meRes.ok) {
+                    const meData = await meRes.json();
+                    if (meData.user_id) {
+                        USER_ID = meData.user_id;
+                        const pEmail = document.querySelector(".profile-email");
+                        if (pEmail) pEmail.textContent = USER_ID;
+                        const pAvatar = document.querySelector(".avatar");
+                        if (pAvatar) pAvatar.textContent = USER_ID[0].toUpperCase();
+                        const pLink = document.querySelector("a.menu-link[href^='/site/']");
+                        if (pLink) pLink.href = `/site/${USER_ID}`;
+                        if (previewIframe && previewIframe.src && previewIframe.src.includes("/site/")) {
+                            previewIframe.src = `/site/${USER_ID}`;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Could not fetch /admin/me:", err);
+            }
+
             await loadConversations();
             await checkPendingDraft();
             setupInputListener();

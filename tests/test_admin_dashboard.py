@@ -342,3 +342,64 @@ def test_concurrency1_user_and_strict_isolation(client, monkeypatch):
     assert "#00e5ff" in admin_check.text
     assert "#10b981" not in admin_check.text
     assert "#f59e0b" not in admin_check.text
+
+
+def test_concurrency2_dashboard_dynamic_binding_and_menu_isolation(client, monkeypatch):
+    """
+    Specifically tests the user scenario:
+    When concurrency2 logs into the dashboard:
+    1. The dashboard is dynamically bound to 'concurrency2' (USER_ID = concurrency2).
+    2. Adding a menu item ('Steamed Idly') updates ONLY concurrency2's site.
+    3. admin@neptor.in's site does NOT receive 'Steamed Idly' and remains pristine.
+    """
+    # 1. Login as concurrency2
+    login_res = client.post("/login", json={"email": "concurrency2", "password": "neptor123"})
+    assert login_res.status_code == 200
+
+    # 2. Get dashboard HTML as concurrency2
+    dash_res = client.get("/admin/dashboard")
+    assert dash_res.status_code == 200
+    assert 'let USER_ID = "concurrency2";' in dash_res.text
+    assert '/site/concurrency2' in dash_res.text
+    assert 'concurrency2</div>' in dash_res.text
+
+    # 3. Check /admin/me endpoint
+    me_res = client.get("/admin/me")
+    assert me_res.status_code == 200
+    assert me_res.json()["user_id"] == "concurrency2"
+
+    # 4. concurrency2 adds 'Steamed Idly' via sandbox/webhook
+    op = [{
+        "type": "add_menu_item",
+        "target": "#menu-items",
+        "data": {
+            "name": "Steamed Idly",
+            "price": 120,
+            "description": "Traditional fluffy steamed rice and lentil cakes served with coconut chutney."
+        }
+    }]
+    async def mock_plan_idly(instruction, context, llm=None):
+        return {"explanation": "Added Steamed Idly for ₹120", "operations": op}
+
+    monkeypatch.setattr("app.sandbox.sandbox_manager.plan_edits", mock_plan_idly)
+
+    wh_res = client.post("/webhook", json={
+        "user_id": "concurrency2",
+        "message": "Add Steamed Idly for 120"
+    })
+    assert wh_res.status_code == 200
+    draft_id = wh_res.json()["draft_id"]
+
+    # 5. concurrency2 approves the draft
+    app_res = client.post("/approve/concurrency2", json={"draft_id": draft_id})
+    assert app_res.status_code == 200
+
+    # 6. concurrency2 live site HAS Steamed Idly
+    c2_site = client.get("/site/concurrency2")
+    assert "Steamed Idly" in c2_site.text
+    assert "₹120" in c2_site.text
+
+    # 7. admin@neptor.in live site DOES NOT HAVE Steamed Idly!
+    admin_site = client.get("/site/admin@neptor.in")
+    assert "Steamed Idly" not in admin_site.text
+    assert "₹120" not in admin_site.text
