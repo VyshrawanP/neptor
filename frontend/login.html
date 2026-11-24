@@ -1,916 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@DEVVYSHRAWAN — Admin Login</title>
+    <title>Neptor Technologies &mdash; Admin Console Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #020307;
-            --surface-glass: rgba(14, 18, 28, 0.82);
-            --surface-card: rgba(20, 26, 40, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.14);
-            --glass-highlight: rgba(255, 255, 255, 0.45);
-            --floral-rose: #f472b6;
-            --floral-blush: #fda4af;
-            --floral-gold: #fbbf24;
-            --floral-emerald: #34d399;
-            --aero-cyan: #00f0ff;
-            --aero-blue: #3b82f6;
-            --text-pure: #ffffff;
-            --text-soft: #e2e8f0;
-            --text-muted: #94a3b8;
-            --danger-bg: rgba(239, 68, 68, 0.18);
-            --danger-border: rgba(239, 68, 68, 0.4);
-            --success-bg: rgba(34, 197, 94, 0.18);
-            --success-border: rgba(34, 197, 94, 0.4);
+            --bg-page: #0f0f10;
+            --bg-card: #141415;
+            --bg-input: #1c1c1f;
+            --bg-input-focus: #222226;
+            --border-hairline: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.16);
+            --text-primary: #ededed;
+            --text-secondary: #a1a1a6;
+            --text-muted: #6e6e73;
+            --accent: #d97706;
+            --btn-bg: #ededed;
+            --btn-text: #0f0f10;
+            --btn-hover: #ffffff;
+            --danger-bg: rgba(229, 72, 77, 0.1);
+            --danger-border: rgba(229, 72, 77, 0.25);
+            --danger-text: #e5484d;
+            --success-bg: rgba(76, 195, 138, 0.1);
+            --success-border: rgba(76, 195, 138, 0.25);
+            --success-text: #4cc38a;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-pure);
+            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 24px;
-            position: relative;
-            overflow-x: hidden;
-            background-image:
-                radial-gradient(ellipse 90% 60% at 20% -10%, rgba(244, 114, 182, 0.12), transparent 70%),
-                radial-gradient(ellipse 80% 50% at 85% 110%, rgba(52, 211, 153, 0.1), transparent 70%),
-                radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.05), transparent 80%);
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Fullscreen Falling Petals Canvas */
-        #petalCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Ambient Glowing Floral Orbs */
-        .ambient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.6;
-            animation: pulseOrb 12s ease-in-out infinite alternate;
-        }
-
-        .orb-1 {
-            width: 480px;
-            height: 480px;
-            top: -100px;
-            left: -100px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, rgba(168, 85, 247, 0.15) 60%, transparent 80%);
-        }
-
-        .orb-2 {
-            width: 520px;
-            height: 520px;
-            bottom: -150px;
-            right: -100px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(6, 182, 212, 0.15) 60%, transparent 80%);
-            animation-duration: 16s;
-            animation-direction: alternate-reverse;
-        }
-
-        .orb-3 {
-            width: 320px;
-            height: 320px;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 70%);
-            animation-duration: 20s;
-        }
-
-        @keyframes pulseOrb {
-            0% {
-                transform: scale(1) translate(0, 0);
-                opacity: 0.45;
-            }
-
-            50% {
-                transform: scale(1.15) translate(30px, -20px);
-                opacity: 0.7;
-            }
-
-            100% {
-                transform: scale(0.95) translate(-25px, 25px);
-                opacity: 0.45;
-            }
-        }
-
-        /* Main Majestic Sanctuary Container */
-        .sanctuary-wrapper {
-            position: relative;
-            z-index: 10;
+        .login-container {
             width: 100%;
-            max-width: 1100px;
-            min-height: 680px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            border-radius: 28px;
-            background: var(--surface-glass);
-            backdrop-filter: blur(28px) saturate(190%);
-            -webkit-backdrop-filter: blur(28px) saturate(190%);
-            border: 1px solid var(--glass-border);
-            box-shadow:
-                0 30px 80px -15px rgba(0, 0, 0, 0.85),
-                0 0 40px rgba(244, 114, 182, 0.12),
-                inset 0 1px 1px var(--glass-highlight);
-            overflow: hidden;
-            animation: sanctuaryEntrance 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            max-width: 400px;
         }
 
-        @keyframes sanctuaryEntrance {
-            0% {
-                opacity: 0;
-                transform: scale(0.94) translateY(30px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        /* Shimmering Animated Card Outline */
-        .sanctuary-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 30px;
-            padding: 2px;
-            background: linear-gradient(135deg, rgba(244, 114, 182, 0.5), rgba(0, 240, 255, 0.3), rgba(251, 191, 36, 0.4), rgba(52, 211, 153, 0.4));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0.7;
-            animation: borderShimmer 8s linear infinite;
-        }
-
-        @keyframes borderShimmer {
-            0% {
-                filter: hue-rotate(0deg);
-            }
-
-            100% {
-                filter: hue-rotate(360deg);
-            }
-        }
-
-        /* Left Side: Botanical Art Sanctuary Showcase */
-        .floral-showcase {
-            position: relative;
-            background: linear-gradient(145deg, rgba(16, 20, 32, 0.85) 0%, rgba(8, 10, 18, 0.95) 100%);
-            padding: 56px 48px;
+        .brand-header {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: space-between;
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            overflow: hidden;
-        }
-
-        .showcase-bg-leaves {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0.12;
-            background-image: radial-gradient(circle at 10% 20%, #ec4899 1px, transparent 1px), radial-gradient(circle at 80% 80%, #34d399 1px, transparent 1px);
-            background-size: 32px 32px;
-        }
-
-        .showcase-header {
-            position: relative;
-            z-index: 2;
-        }
-
-        .floral-brand-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 18px;
-            border-radius: 999px;
-            background: rgba(244, 114, 182, 0.12);
-            border: 1px solid rgba(244, 114, 182, 0.3);
-            color: var(--floral-blush);
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(244, 114, 182, 0.2);
             margin-bottom: 24px;
-            animation: floatPill 4s ease-in-out infinite alternate;
         }
 
-        @keyframes floatPill {
-            0% {
-                transform: translateY(0);
-            }
-
-            100% {
-                transform: translateY(-4px);
-            }
-        }
-
-        .floral-brand-pill svg {
-            animation: spinFlower 14s linear infinite;
-        }
-
-        @keyframes spinFlower {
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .showcase-title {
-            font-family: 'Cinzel', serif;
-            font-size: 40px;
-            font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: 0.02em;
-            background: linear-gradient(135deg, #ffffff 20%, #fbcfe8 50%, #fed7aa 80%, #ffffff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 14px;
-            text-shadow: 0 10px 30px rgba(244, 114, 182, 0.25);
-        }
-
-        .showcase-subtitle {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 19px;
-            color: #cbd5e1;
-            line-height: 1.5;
-            margin-bottom: 28px;
-        }
-
-        /* Center Animated Botanical Illustration */
-        .botanical-art-center {
-            position: relative;
-            z-index: 2;
+        .brand-title {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .blooming-lotus-svg {
-            width: 240px;
-            height: 240px;
-            filter: drop-shadow(0 0 25px rgba(244, 114, 182, 0.45)) drop-shadow(0 0 45px rgba(0, 240, 255, 0.25));
-            animation: breathingFlower 6s ease-in-out infinite;
-        }
-
-        @keyframes breathingFlower {
-
-            0%,
-            100% {
-                transform: scale(1) rotate(0deg);
-            }
-
-            50% {
-                transform: scale(1.06) rotate(3deg);
-            }
-        }
-
-        .petal-anim-1 {
-            animation: petalSway 5s ease-in-out infinite alternate;
-            transform-origin: center bottom;
-        }
-
-        .petal-anim-2 {
-            animation: petalSway 5s ease-in-out 1.2s infinite alternate;
-            transform-origin: center bottom;
-        }
-
-        .petal-anim-3 {
-            animation: petalSway 5s ease-in-out 2.4s infinite alternate;
-            transform-origin: center bottom;
-        }
-
-        @keyframes petalSway {
-            0% {
-                transform: rotate(0deg);
-                opacity: 0.85;
-            }
-
-            100% {
-                transform: rotate(5deg) scale(1.04);
-                opacity: 1;
-            }
-        }
-
-        /* Botanical Tags */
-        .floral-tags-row {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-wrap: wrap;
             gap: 10px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
         }
 
-        .floral-tag {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 8px 14px;
-            border-radius: 999px;
-            font-size: 12px;
-            color: var(--text-soft);
-            display: flex;
+        .brand-pip {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: inline-block;
+        }
+
+        .system-status {
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .floral-tag:hover {
-            border-color: var(--floral-rose);
-            color: #ffffff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(244, 114, 182, 0.25);
-        }
-
-        /* Right Side: Grand Login Form Panel */
-        .login-panel {
-            padding: 56px 48px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            background: rgba(11, 15, 25, 0.75);
-        }
-
-        .panel-header {
-            margin-bottom: 32px;
-        }
-
-        .author-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--aero-cyan);
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .panel-title {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            color: #ffffff;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .panel-desc {
-            font-size: 14px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            line-height: 1.5;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #4cc38a;
+        }
+
+        .login-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-hairline);
+            border-radius: 12px;
+            padding: 32px 28px;
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+        }
+
+        .card-header h1 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .card-header p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
         }
 
         .form-group {
-            margin-bottom: 22px;
-            position: relative;
+            margin-bottom: 16px;
         }
 
         .form-label {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 13px;
-            font-weight: 600;
-            color: #cbd5e1;
-            margin-bottom: 8px;
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
         }
 
         .input-wrapper {
             position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 16px;
-            color: var(--text-muted);
-            transition: color 0.25s ease;
-            pointer-events: none;
         }
 
         .form-input {
             width: 100%;
-            background: rgba(5, 7, 13, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            border-radius: 14px;
-            padding: 15px 18px 15px 48px;
-            font-size: 15px;
-            color: #ffffff;
+            height: 40px;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-hairline);
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            font-family: inherit;
             outline: none;
-            transition: all 0.25s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .form-input:hover {
+            border-color: var(--border-hover);
         }
 
         .form-input:focus {
-            border-color: var(--floral-rose);
-            background: rgba(12, 16, 28, 0.85);
-            box-shadow:
-                0 0 0 3px rgba(244, 114, 182, 0.25),
-                0 0 20px rgba(244, 114, 182, 0.2),
-                inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            background-color: var(--bg-input-focus);
+            border-color: rgba(255, 255, 255, 0.35);
         }
 
-        .form-input:focus+.input-icon,
-        .input-wrapper:focus-within .input-icon {
-            color: var(--floral-rose);
-        }
-
-        /* Glossy Aero Floral Submit Button */
         .btn-submit {
-            position: relative;
             width: 100%;
-            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #00d2ff 100%);
-            background-size: 200% 200%;
-            color: #ffffff;
-            border: none;
-            padding: 16px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 0.02em;
+            height: 40px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            font-family: inherit;
             cursor: pointer;
-            transition: all 0.35s ease;
-            display: flex;
+            margin-top: 8px;
+            transition: background-color 0.15s ease, transform 0.05s ease;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin-top: 28px;
-            box-shadow:
-                inset 0 1px 1px rgba(255, 255, 255, 0.6),
-                0 12px 28px -6px rgba(236, 72, 153, 0.5),
-                0 0 20px rgba(0, 210, 255, 0.3);
-            overflow: hidden;
-            animation: gradientShift 6s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Glossy Specular Light Reflection Sweep */
-        .btn-submit::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 40%;
-            height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transform: rotate(25deg);
-            transition: none;
-            animation: glossSweep 4.5s ease-in-out infinite;
-        }
-
-        @keyframes glossSweep {
-            0% {
-                left: -60%;
-            }
-
-            20% {
-                left: 140%;
-            }
-
-            100% {
-                left: 140%;
-            }
+            gap: 8px;
         }
 
         .btn-submit:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow:
-                inset 0 1px 1px rgba(255, 255, 255, 0.8),
-                0 16px 36px -4px rgba(236, 72, 153, 0.65),
-                0 0 28px rgba(0, 210, 255, 0.5);
+            background-color: var(--btn-hover);
         }
 
         .btn-submit:active {
-            transform: translateY(1px) scale(0.99);
+            transform: scale(0.99);
         }
 
         .btn-submit:disabled {
-            opacity: 0.65;
+            opacity: 0.6;
             cursor: not-allowed;
-            transform: none !important;
+        }
+
+        .demo-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-hairline);
+        }
+
+        .demo-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 10px;
+        }
+
+        .demo-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .btn-demo {
+            background: transparent;
+            border: 1px solid var(--border-hairline);
+            border-radius: 6px;
+            padding: 6px 8px;
+            color: var(--text-secondary);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-align: center;
+            transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .btn-demo:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .alert-box {
-            padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 22px;
             display: none;
-            animation: alertSlide 0.3s ease;
-        }
-
-        @keyframes alertSlide {
-            0% {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            margin-top: 16px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.8125rem;
+            line-height: 1.45;
         }
 
         .alert-danger {
             background: var(--danger-bg);
             border: 1px solid var(--danger-border);
-            color: #fca5a5;
+            color: var(--danger-text);
         }
 
         .alert-success {
             background: var(--success-bg);
             border: 1px solid var(--success-border);
-            color: #86efac;
+            color: var(--success-text);
         }
 
-        /* Gilded Botanical Credentials Hint Box */
-        .credentials-card {
-            margin-top: 30px;
-            padding: 16px 20px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed rgba(244, 114, 182, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 14px;
-        }
-
-        .credentials-info {
-            font-size: 12px;
+        .login-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            line-height: 1.5;
         }
 
-        .credentials-info strong {
-            color: var(--floral-blush);
+        .login-footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.15s ease;
         }
 
-        .credentials-info code {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 2px 7px;
-            border-radius: 6px;
-            color: #ffffff;
-            font-family: monospace;
-            font-size: 12px;
-        }
-
-        /* Responsive Layout */
-        @media (max-width: 900px) {
-            .sanctuary-wrapper {
-                grid-template-columns: 1fr;
-                max-width: 520px;
-                min-height: auto;
-            }
-
-            .floral-showcase {
-                padding: 40px 32px;
-                border-right: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            }
-
-            .login-panel {
-                padding: 40px 32px;
-            }
-
-            .showcase-title {
-                font-size: 32px;
-            }
+        .login-footer a:hover {
+            color: var(--text-primary);
         }
     </style>
 </head>
-
 <body>
-
-    <!-- Falling Floral Petals Background Animation -->
-    <canvas id="petalCanvas"></canvas>
-
-    <!-- Glowing Ambient Nebula Orbs -->
-    <div class="ambient-orb orb-1"></div>
-    <div class="ambient-orb orb-2"></div>
-    <div class="ambient-orb orb-3"></div>
-
-    <!-- Grand Floral Sanctuary Wrapper -->
-    <main class="sanctuary-wrapper">
-
-        <!-- Left Column: Botanical Art & Brand Showcase -->
-        <section class="floral-showcase">
-            <div class="showcase-bg-leaves"></div>
-
-            <div class="showcase-header">
-                <div class="floral-brand-pill">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3" fill="#f472b6" />
-                        <path d="M12 2C9 5 9 8 12 9C15 8 15 5 12 2Z" fill="#fbcfe8" />
-                        <path d="M12 22C9 19 9 16 12 15C15 16 15 19 12 22Z" fill="#fbcfe8" />
-                        <path d="M2 12C5 9 8 9 9 12C8 15 5 15 2 12Z" fill="#fbcfe8" />
-                        <path d="M22 12C19 9 16 9 15 12C16 15 19 15 22 12Z" fill="#fbcfe8" />
-                    </svg>
-                    <span>Floral Sanctuary Engine</span>
-                </div>
-
-                <h1 class="showcase-title">@DEVVYSHRAWAN</h1>
-                <p class="showcase-subtitle">"Where exquisite floral art breathes life into conversational web
-                    architecture."</p>
-                <div
-                    style="font-size: 11px; color: var(--text-muted); opacity: 0.7; letter-spacing: 0.05em; text-transform: uppercase;">
-                    Powered by Neptor Technologies AI Engine</div>
+    <div class="login-container">
+        <div class="brand-header">
+            <div class="brand-title">
+                <span class="brand-pip"></span>
+                <span>Neptor Technologies</span>
             </div>
-
-            <!-- Central Animated Botanical Lotus / Flower -->
-            <div class="botanical-art-center">
-                <svg class="blooming-lotus-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <radialGradient id="bloomGlow" cx="50%" cy="50%" r="50%">
-                            <stop offset="0%" stop-color="#f472b6" stop-opacity="0.9" />
-                            <stop offset="60%" stop-color="#8b5cf6" stop-opacity="0.6" />
-                            <stop offset="100%" stop-color="#00f0ff" stop-opacity="0" />
-                        </radialGradient>
-                        <linearGradient id="petalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#fda4af" />
-                            <stop offset="100%" stop-color="#e11d48" />
-                        </linearGradient>
-                        <linearGradient id="petalGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#6ee7b7" />
-                            <stop offset="100%" stop-color="#059669" />
-                        </linearGradient>
-                        <linearGradient id="goldStem" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#fef08a" />
-                            <stop offset="100%" stop-color="#f59e0b" />
-                        </linearGradient>
-                    </defs>
-
-                    <!-- Background Aura Halo -->
-                    <circle cx="100" cy="100" r="75" fill="url(#bloomGlow)" />
-
-                    <!-- Delicate Botanical Vines / Tendrils -->
-                    <path d="M30 150 C 45 110, 75 130, 95 160" stroke="url(#goldStem)" stroke-width="2.5"
-                        stroke-linecap="round" stroke-dasharray="4 2" />
-                    <path d="M170 150 C 155 110, 125 130, 105 160" stroke="url(#goldStem)" stroke-width="2.5"
-                        stroke-linecap="round" stroke-dasharray="4 2" />
-                    <circle cx="95" cy="160" r="4" fill="#fbbf24" />
-                    <circle cx="105" cy="160" r="4" fill="#fbbf24" />
-
-                    <!-- Outer Floral Petals -->
-                    <path class="petal-anim-1" d="M100 45 C 70 65, 60 110, 100 145 C 140 110, 130 65, 100 45 Z"
-                        fill="url(#petalGrad1)" opacity="0.85" />
-                    <path class="petal-anim-2" d="M55 90 C 70 70, 115 85, 100 135 C 65 125, 45 105, 55 90 Z"
-                        fill="url(#petalGrad1)" opacity="0.75" />
-                    <path class="petal-anim-3" d="M145 90 C 130 70, 85 85, 100 135 C 135 125, 155 105, 145 90 Z"
-                        fill="url(#petalGrad1)" opacity="0.75" />
-
-                    <!-- Inner Delicate Petals -->
-                    <path d="M75 105 C 85 85, 115 85, 125 105 C 115 135, 85 135, 75 105 Z" fill="#fbcfe8"
-                        opacity="0.9" />
-
-                    <!-- Golden Core Stamen & Pistils -->
-                    <circle cx="100" cy="110" r="10" fill="#fbbf24" filter="drop-shadow(0 0 8px #fbbf24)" />
-                    <circle cx="95" cy="106" r="3" fill="#ffffff" />
-                    <circle cx="105" cy="106" r="3" fill="#ffffff" />
-                    <circle cx="100" cy="114" r="3" fill="#ffffff" />
-                </svg>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                <span>Admin Console</span>
             </div>
+        </div>
 
-            <!-- Botanical Features Tags -->
-            <div class="floral-tags-row">
-                <span class="floral-tag">🌸 Bloom Engine v2.0</span>
-                <span class="floral-tag">🌿 Glossy Aero Invariants</span>
-                <span class="floral-tag">✨ Instant Previews</span>
+        <div class="login-card">
+            <div class="card-header">
+                <h1>Sign in to Admin Console</h1>
+                <p>Manage drafts, review side-by-side diffs, and approve website modifications.</p>
             </div>
-        </section>
-
-        <!-- Right Column: Grand Login Console -->
-        <section class="login-panel">
-            <div class="panel-header">
-                <span class="author-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
-                    </svg>
-                    Admin Console &bull; Master Administration
-                </span>
-                <h2 class="panel-title">Sign In</h2>
-                <p class="panel-desc">Authenticate to manage your AI website editor, draft previews, and live deployment
-                    sandboxes.</p>
-            </div>
-
-            <div id="alertBox" class="alert-box alert-danger" role="alert"></div>
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label class="form-label" for="email">
-                        <span>Administrator Email</span>
-                    </label>
+                    <label class="form-label" for="email">Account Identifier</label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <rect width="20" height="16" x="2" y="4" rx="3"></rect>
-                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                        </svg>
-                        <input class="form-input" type="text" id="email" name="email" value="admin@neptor.in" required
-                            autofocus autocomplete="username" placeholder="admin@neptor.in or concurrency1" />
+                        <input class="form-input" type="text" id="email" name="email" value="admin@neptor.in" required autofocus autocomplete="username" placeholder="admin@neptor.in" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="password">
-                        <span>Master Password</span>
-                    </label>
+                    <label class="form-label" for="password">Password</label>
                     <div class="input-wrapper">
-                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
-                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                        <input class="form-input" type="password" id="password" name="password" placeholder="••••••••"
-                            required autocomplete="current-password" />
+                        <input class="form-input" type="password" id="password" name="password" value="neptor123" required autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
                     </div>
                 </div>
 
-                <button type="submit" id="submitBtn" class="btn-submit">
-                    <span>Enter Sanctuary</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2.5">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
+                <button class="btn-submit" type="submit" id="submitBtn">
+                    <span>Sign In</span>
                 </button>
             </form>
 
-            <div class="credentials-card">
-                <div class="credentials-info">
-                    <strong>Demo Accounts:</strong><br>
-                    &bull; User 1: <code>admin@neptor.in</code> &bull; Pass: <code>neptor123</code><br>
-                    &bull; User 2: <code>concurrency1</code> &bull; Pass: <code>neptor123</code><br>
-                    &bull; User 3: <code>concurrency2</code> &bull; Pass: <code>neptor123</code> (Multi-User Isolation)
+            <div id="alertBox" class="alert-box"></div>
+
+            <div class="demo-section">
+                <div class="demo-title">Test Multi-Tenant Isolation</div>
+                <div class="demo-buttons">
+                    <button class="btn-demo" type="button" onclick="setDemoUser('admin@neptor.in')">admin</button>
+                    <button class="btn-demo" type="button" onclick="setDemoUser('concurrency1')">user 1</button>
+                    <button class="btn-demo" type="button" onclick="setDemoUser('concurrency2')">user 2</button>
                 </div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
             </div>
-        </section>
+        </div>
 
-    </main>
+        <div class="login-footer">
+            <p>Neptor Technologies &bull; <a href="/health">Health API</a></p>
+        </div>
+    </div>
 
-    <!-- Interactive Canvas Floral Petal Physics System -->
     <script>
-        (function initPetals() {
-            const canvas = document.getElementById("petalCanvas");
-            const ctx = canvas.getContext("2d");
+        function setDemoUser(userId) {
+            document.getElementById("email").value = userId;
+            document.getElementById("password").value = "neptor123";
+        }
 
-            let width = (canvas.width = window.innerWidth);
-            let height = (canvas.height = window.innerHeight);
-
-            window.addEventListener("resize", () => {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            });
-
-            const PETAL_COUNT = 38;
-            const petals = [];
-
-            const petalColors = [
-                { r: 244, g: 114, b: 182, a: 0.75 }, // soft rose
-                { r: 251, g: 191, b: 36, a: 0.65 }, // golden pollen
-                { r: 253, g: 164, b: 175, a: 0.8 },  // blush sakura
-                { r: 244, g: 63, b: 94, a: 0.65 }, // ruby petal
-                { r: 0, g: 240, b: 255, a: 0.55 }, // aero cyan dewdrop
-            ];
-
-            for (let i = 0; i < PETAL_COUNT; i++) {
-                petals.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height - height,
-                    size: Math.random() * 9 + 6,
-                    speedX: Math.random() * 1.5 - 0.75,
-                    speedY: Math.random() * 1.4 + 0.8,
-                    angle: Math.random() * 360,
-                    angularSpeed: (Math.random() - 0.5) * 1.8,
-                    flip: Math.random() * Math.PI,
-                    flipSpeed: Math.random() * 0.03 + 0.01,
-                    color: petalColors[Math.floor(Math.random() * petalColors.length)],
-                });
-            }
-
-            function drawPetal(p) {
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate((p.angle * Math.PI) / 180);
-                ctx.scale(Math.sin(p.flip), 1);
-
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.bezierCurveTo(p.size / 2, -p.size, p.size * 1.2, -p.size * 0.3, 0, p.size * 1.3);
-                ctx.bezierCurveTo(-p.size * 1.2, -p.size * 0.3, -p.size / 2, -p.size, 0, 0);
-
-                const c = p.color;
-                ctx.fillStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a})`;
-                ctx.shadowColor = `rgba(${c.r}, ${c.g}, ${c.b}, 0.5)`;
-                ctx.shadowBlur = 8;
-                ctx.fill();
-                ctx.restore();
-            }
-
-            function animatePetals() {
-                ctx.clearRect(0, 0, width, height);
-
-                for (let i = 0; i < petals.length; i++) {
-                    const p = petals[i];
-                    p.x += p.speedX + Math.sin(p.y * 0.005) * 0.8;
-                    p.y += p.speedY;
-                    p.angle += p.angularSpeed;
-                    p.flip += p.flipSpeed;
-
-                    if (p.y > height + 20) {
-                        p.y = -20;
-                        p.x = Math.random() * width;
-                    }
-                    if (p.x > width + 20) p.x = -20;
-                    if (p.x < -20) p.x = width + 20;
-
-                    drawPetal(p);
-                }
-
-                requestAnimationFrame(animatePetals);
-            }
-
-            animatePetals();
-        })();
-
-        // Login Form Submission Logic
-        const form = document.getElementById("loginForm");
-        const submitBtn = document.getElementById("submitBtn");
+        const loginForm = document.getElementById("loginForm");
         const alertBox = document.getElementById("alertBox");
+        const submitBtn = document.getElementById("submitBtn");
 
-        form.addEventListener("submit", async (e) => {
+        loginForm.addEventListener("submit", async function(e) {
             e.preventDefault();
             alertBox.style.display = "none";
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `
-                <span>Blooming Authentication...</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 1s linear infinite;">
-                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
-                    <path d="M12 2a10 10 0 0 1 10 10"/>
-                </svg>
-            `;
+            submitBtn.textContent = "Authenticating...";
 
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value;
@@ -926,27 +355,26 @@
 
                 if (res.ok) {
                     alertBox.className = "alert-box alert-success";
-                    alertBox.textContent = "Welcome to @DEVVYSHRAWAN Sanctuary! Redirecting to Dashboard...";
+                    alertBox.textContent = "Signed in successfully. Redirecting to Dashboard...";
                     alertBox.style.display = "block";
                     setTimeout(() => {
                         window.location.href = "/admin/dashboard";
-                    }, 500);
+                    }, 400);
                 } else {
                     alertBox.className = "alert-box alert-danger";
-                    alertBox.textContent = data.detail || "Invalid email or password.";
+                    alertBox.textContent = data.detail || "Authentication failed. Check credentials.";
                     alertBox.style.display = "block";
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = `<span>Enter Sanctuary</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+                    submitBtn.textContent = "Sign In";
                 }
             } catch (err) {
                 alertBox.className = "alert-box alert-danger";
-                alertBox.textContent = "Network error: unable to connect to server.";
+                alertBox.textContent = "Network error connecting to API server.";
                 alertBox.style.display = "block";
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = `<span>Enter Sanctuary</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+                submitBtn.textContent = "Sign In";
             }
         });
     </script>
 </body>
-
 </html>

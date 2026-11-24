@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@DEVVYSHRAWAN — AI Website Editor Admin Dashboard</title>
+    <title>Neptor &mdash; AI Website Editor Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #000000;
-            --bg-sidebar: #04060b;
-            --bg-chat: #010204;
-            --bg-preview: #000000;
-            --card-surface: rgba(18, 24, 38, 0.78);
-            --card-border: rgba(255, 255, 255, 0.12);
+            --bg-base: #0f0f10;
+            --bg-sidebar: #0f0f10;
+            --bg-chat: #141415;
+            --bg-preview: #0f0f10;
+            --card-surface: #19191b;
+            --card-border: rgba(255, 255, 255, 0.08);
             --accent: #00e5ff;
             --accent-hover: #38bdf8;
-            --accent-glow: rgba(0, 229, 255, 0.35);
-            --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --success: #10b981;
-            --success-glow: rgba(16, 185, 129, 0.25);
-            --danger: #ef4444;
+            --accent-glow: none;
+            --text-primary: #ededed;
+            --text-secondary: #a1a1a6;
+            --text-muted: #6e6e73;
+            --success: #4cc38a;
+            --success-glow: none;
+            --danger: #e5484d;
             --warning: #f59e0b;
         }
 
@@ -50,17 +50,17 @@
         }
 
         .sidebar-logo {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--card-surface);
+            border: 1px solid var(--card-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            font-size: 18px;
-            color: #ffffff;
-            box-shadow: 0 4px 12px var(--accent-glow);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--accent);
         }
 
         .sidebar-brand h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
@@ -212,9 +212,9 @@
         }
 
         .welcome-card {
-            background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0) 100%);
+            background: var(--card-surface);
             border: 1px solid var(--card-border);
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 24px;
             text-align: center;
             margin: auto;
@@ -652,9 +652,9 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo">@D</div>
+            <div class="sidebar-logo">N</div>
             <div class="sidebar-brand">
-                <h2>@DEVVYSHRAWAN</h2>
+                <h2>Neptor Technologies</h2>
                 <p>AI Website Editor</p>
             </div>
         </div>
@@ -686,7 +686,7 @@
                 <div class="profile-email">admin@neptor.in</div>
             </div>
             <button class="menu-link" style="width: auto; padding: 4px;" title="Change Password" onclick="openPasswordModal()">⚙</button>
-            <button class="menu-link" style="width: auto; padding: 4px; color: #f87171;" title="Sign Out" onclick="logoutAdmin()">🚪</button>
+            <button class="menu-link" style="width: auto; padding: 6px 8px; font-size: 11px; color: #e5484d;" title="Sign Out" onclick="logoutAdmin()">Sign Out</button>
         </div>
     </aside>
 
